@@ -3,6 +3,7 @@ namespace Conductor.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Conductor.Domain;
 using Conductor.Infrastructure.Persistence;
 
 public static class DependencyInjection
@@ -21,6 +22,8 @@ public static class DependencyInjection
                     npgsqlOptions.MigrationsAssembly(typeof(ConductorDbContext).Assembly.FullName);
                 });
         });
+
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ConductorDbContext>());
 
         return services;
     }
