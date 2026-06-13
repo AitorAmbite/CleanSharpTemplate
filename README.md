@@ -42,6 +42,21 @@ dotnet run --project src/server/Conductor.Api
 dotnet run --project src/agent/Conductor.Agent
 ```
 
+## Database Migrations
+
+```bash
+# Create a new migration
+dotnet ef migrations add <MigrationName> \
+  --project src/server/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
+  --startup-project src/server/Conductor.Api/Conductor.Api.csproj \
+  --output-dir Persistence/Migrations
+
+# Apply migrations
+dotnet ef database update \
+  --project src/server/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
+  --startup-project src/server/Conductor.Api/Conductor.Api.csproj
+```
+
 ## Build & Test
 
 ```bash
