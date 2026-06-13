@@ -21,11 +21,6 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
         builder.Property(j => j.IsEnabled)
             .IsRequired();
 
-        builder.Property(j => j.WorkingDirectory)
-            .HasMaxLength(500);
-
-        builder.Property(j => j.TimeoutSeconds);
-
         builder.Property(j => j.Tags)
             .HasMaxLength(500);
 
@@ -50,6 +45,14 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
             cmdBuilder.Property(c => c.Arguments)
                 .HasColumnName("Arguments")
                 .HasMaxLength(2000);
+
+            cmdBuilder.Property(c => c.WorkingDirectory)
+                .HasColumnName("WorkingDirectory")
+                .IsRequired()
+                .HasMaxLength(500);
+
+            cmdBuilder.Property(c => c.TimeoutSeconds)
+                .HasColumnName("TimeoutSeconds");
         });
 
         builder.HasMany(j => j.Executions)

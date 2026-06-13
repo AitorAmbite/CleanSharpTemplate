@@ -12,8 +12,6 @@ public class Job : AggregateRoot
 
     #region "Execution config"
     public Command Command { get; private set; } = null!;
-    public string? WorkingDirectory { get; set; }
-    public int? TimeoutSeconds { get; set; }
 
     #endregion
 
@@ -29,11 +27,11 @@ public class Job : AggregateRoot
 
     public void SetCronExpression(string cronExpression)
     {
-        CronExpression = ValueObjects.CronExpression.Create(cronExpression);
+        CronExpression = CronExpression.Create(cronExpression);
     }
 
-    public void SetCommand(string command, string? arguments)
+    public void SetCommand(string command, string? arguments, string workingDirectory, int? timeoutSeconds)
     {
-        Command = ValueObjects.Command.Create(command, arguments);
+        Command = Command.Create(command, arguments, workingDirectory, timeoutSeconds);
     }
 }

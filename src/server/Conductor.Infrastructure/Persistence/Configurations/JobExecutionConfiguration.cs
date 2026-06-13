@@ -21,24 +21,30 @@ public class JobExecutionConfiguration : IEntityTypeConfiguration<JobExecution>
 
         builder.Property(e => e.EndTime);
 
-        builder.OwnsOne(e => e.ExitCode, exitBuilder =>
+        builder.OwnsOne(e => e.Result, resultBuilder =>
         {
-            exitBuilder.Property(e => e.Value)
-                .HasColumnName("ExitCode");
+            resultBuilder.OwnsOne(r => r.ExitCode, exitBuilder =>
+            {
+                exitBuilder.Property(e => e.Value)
+                    .HasColumnName("ExitCode");
+            });
+
+            resultBuilder.Property(r => r.StdOut)
+                .HasColumnName("StdOut")
+                .HasColumnType("TEXT");
+
+            resultBuilder.Property(r => r.StdErr)
+                .HasColumnName("StdErr")
+                .HasColumnType("TEXT");
+
+            resultBuilder.Property(r => r.ErrorMessage)
+                .HasColumnName("ErrorMessage")
+                .HasMaxLength(2000);
         });
-
-        builder.Property(e => e.StdOut)
-            .HasColumnType("TEXT");
-
-        builder.Property(e => e.StdErr)
-            .HasColumnType("TEXT");
 
         builder.Property(e => e.Status)
             .IsRequired()
             .HasConversion<string>();
-
-        builder.Property(e => e.ErrorMessage)
-            .HasMaxLength(2000);
 
         builder.Property(e => e.ExecutedByAgentId);
 
