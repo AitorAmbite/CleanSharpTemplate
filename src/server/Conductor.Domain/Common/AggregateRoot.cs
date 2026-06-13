@@ -1,9 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Conductor.Domain.Common;
 
 public abstract class AggregateRoot : Entity
 {
     private readonly List<DomainEvent> _domainEvents = [];
-
+    
+    [NotMapped]
     public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     public void AddDomainEvent(DomainEvent eventItem)

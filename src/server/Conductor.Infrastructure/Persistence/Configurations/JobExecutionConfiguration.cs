@@ -23,6 +23,8 @@ public class JobExecutionConfiguration : IEntityTypeConfiguration<JobExecution>
 
         builder.OwnsOne(e => e.Result, resultBuilder =>
         {
+            resultBuilder.ToTable("ExecutionResults");
+
             resultBuilder.OwnsOne(r => r.ExitCode, exitBuilder =>
             {
                 exitBuilder.Property(e => e.Value)
