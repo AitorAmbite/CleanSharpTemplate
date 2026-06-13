@@ -39,6 +39,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ConductorDbContext>());
+        services.AddScoped<ICronExpressionValidator, Services.CronExpressionValidator>();
 
         return services;
     }
