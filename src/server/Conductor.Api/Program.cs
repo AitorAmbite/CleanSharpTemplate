@@ -1,4 +1,3 @@
-using Conductor.Api.Endpoints;
 using Conductor.Application;
 using Conductor.Infrastructure;
 using Scalar.AspNetCore;
@@ -13,7 +12,6 @@ builder.Host.AddApplication();
 
 builder.Services.AddOpenApi();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,10 +22,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// Map endpoints
-app.MapJobEndpoints();
-app.MapJobExecutionEndpoints();
-app.MapAgentEndpoints();
 
 app.Run();
