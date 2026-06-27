@@ -9,18 +9,16 @@ Open source alternative to VisualCron. Distributed job scheduler based on agents
 ```
 Conductor/
 ├── src/
-│   ├── server/
-│   │   ├── Conductor.Domain/          # Entities, domain events, repository interfaces
-│   │   ├── Conductor.Application/     # Commands, queries, handlers (Wolverine)
-│   │   ├── Conductor.Infrastructure/  # EF Core, persistence, repository implementations
-│   │   └── Conductor.Api/             # ASP.NET Core Minimal API host
+│   ├── Conductor.Domain/          # Entities, domain events, repository interfaces
+│   ├── Conductor.Application/     # Commands, queries, handlers (Wolverine)
+│   ├── Conductor.Infrastructure/  # EF Core, persistence, repository implementations
+│   ├── Conductor.Api/             # ASP.NET Core Minimal API host
 │   └── shared/
-│       └── Conductor.Contracts/       # Shared DTOs
+│       └── Conductor.Contracts/   # Shared DTOs
 ├── tests/
-│   └── server/
-│       ├── Conductor.Domain.Tests/
-│       ├── Conductor.Application.Tests/
-│       └── Conductor.Integration.Tests/
+│   ├── Conductor.Domain.Tests/
+│   ├── Conductor.Application.Tests/
+│   └── Conductor.Integration.Tests/
 ├── docker/
 │   └── Dockerfile
 ├── docker-compose.yml
@@ -68,7 +66,7 @@ This starts PostgreSQL and the API. The API applies pending migrations automatic
 2. Run the API:
 
    ```bash
-   dotnet run --project src/server/Conductor.Api
+   dotnet run --project src/Conductor.Api
    ```
 
 The API expects a connection string in `DatabaseConfig:ConnectionString`. By default `appsettings.Development.json` points to `localhost:5432`.
@@ -79,8 +77,8 @@ Create a new migration:
 
 ```bash
 dotnet ef migrations add <MigrationName> \
-  --project src/server/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
-  --startup-project src/server/Conductor.Api/Conductor.Api.csproj \
+  --project src/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
+  --startup-project src/Conductor.Api/Conductor.Api.csproj \
   --output-dir Persistence/Migrations
 ```
 
@@ -88,8 +86,8 @@ Apply migrations locally:
 
 ```bash
 dotnet ef database update \
-  --project src/server/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
-  --startup-project src/server/Conductor.Api/Conductor.Api.csproj
+  --project src/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
+  --startup-project src/Conductor.Api/Conductor.Api.csproj
 ```
 
 Migrations are applied automatically when the API starts inside Docker.

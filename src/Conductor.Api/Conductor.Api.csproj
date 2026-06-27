@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Conductor.Application\Conductor.Application.csproj" />
     <ProjectReference Include="..\Conductor.Infrastructure\Conductor.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\shared\Conductor.Contracts\Conductor.Contracts.csproj" />
+    <ProjectReference Include="..\shared\Conductor.Contracts\Conductor.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ WORKDIR /src
 
 COPY . .
 RUN dotnet restore Conductor.slnx
-RUN dotnet publish src/server/Conductor.Api/Conductor.Api.csproj \
+RUN dotnet publish src/Conductor.Api/Conductor.Api.csproj \
     -c Release \
     -o /app/publish \
     --no-restore

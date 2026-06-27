@@ -1,17 +1,16 @@
 <Solution>
-  <Folder Name="/src/" />
-  <Folder Name="/src/server/">
-    <Project Path="src/server/Conductor.Api/Conductor.Api.csproj" />
-    <Project Path="src/server/Conductor.Application/Conductor.Application.csproj" />
-    <Project Path="src/server/Conductor.Domain/Conductor.Domain.csproj" />
-    <Project Path="src/server/Conductor.Infrastructure/Conductor.Infrastructure.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/Conductor.Api/Conductor.Api.csproj" />
+    <Project Path="src/Conductor.Application/Conductor.Application.csproj" />
+    <Project Path="src/Conductor.Domain/Conductor.Domain.csproj" />
+    <Project Path="src/Conductor.Infrastructure/Conductor.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/shared/">
     <Project Path="src/shared/Conductor.Contracts/Conductor.Contracts.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/server/Conductor.Application.Tests/Conductor.Application.Tests.csproj" />
-    <Project Path="tests/server/Conductor.Domain.Tests/Conductor.Domain.Tests.csproj" />
-    <Project Path="tests/server/Conductor.Integration.Tests/Conductor.Integration.Tests.csproj" />
+    <Project Path="tests/Conductor.Application.Tests/Conductor.Application.Tests.csproj" />
+    <Project Path="tests/Conductor.Domain.Tests/Conductor.Domain.Tests.csproj" />
+    <Project Path="tests/Conductor.Integration.Tests/Conductor.Integration.Tests.csproj" />
   </Folder>
 </Solution>

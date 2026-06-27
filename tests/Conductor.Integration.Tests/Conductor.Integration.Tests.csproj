@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\server\Conductor.Api\Conductor.Api.csproj" />
-    <ProjectReference Include="..\..\..\src\server\Conductor.Infrastructure\Conductor.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Conductor.Api\Conductor.Api.csproj" />
+    <ProjectReference Include="..\..\src\Conductor.Infrastructure\Conductor.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
