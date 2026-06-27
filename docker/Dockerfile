@@ -2,8 +2,8 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY . .
-RUN dotnet restore Conductor.slnx
-RUN dotnet publish src/Conductor.Api/Conductor.Api.csproj \
+RUN dotnet restore Template.slnx
+RUN dotnet publish src/Template.Api/Template.Api.csproj \
     -c Release \
     -o /app/publish \
     --no-restore
@@ -14,4 +14,4 @@ COPY --from=build /app/publish .
 
 EXPOSE 5000
 
-ENTRYPOINT ["dotnet", "Conductor.Api.dll"]
+ENTRYPOINT ["dotnet", "Template.Api.dll"]

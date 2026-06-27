@@ -28,7 +28,7 @@ This is a well-intentioned architectural skeleton, but it is still too empty and
 - `Microsoft.CodeAnalysis.Workspaces.MSBuild` 4.8.0 conflicts with resolved 5.0.0 packages.
 - Align or remove unused packages.
 
-### 2. Remove `Microsoft.EntityFrameworkCore` from `Conductor.Application`
+### 2. Remove `Microsoft.EntityFrameworkCore` from `Template.Application`
 - `Application` currently depends on EF Core because `PaginatedList` and `QueryableExtensions` expose `IQueryable<T>`.
 - This breaks strict Clean Architecture. See "Recommended approach for pagination" below.
 
@@ -61,11 +61,11 @@ This is a well-intentioned architectural skeleton, but it is still too empty and
 - Missing `AddQuartzServer()` in `Application` DI.
 - Without it, the scheduler does not run.
 
-### 9. Complete or remove `Conductor.Contracts`
+### 9. Complete or remove `Template.Contracts`
 - The project is empty. If the agent will share contracts, add example DTOs/messages.
 
 ### 10. Clean up orphan test folders
-- `tests/server/Conductor.Functional.Tests/` and `tests/server/Conductor.Infrastructure.Tests/` exist physically but are not in the solution and are empty.
+- `tests/server/Template.Functional.Tests/` and `tests/server/Template.Infrastructure.Tests/` exist physically but are not in the solution and are empty.
 - Either add `.csproj` files and include them in `.slnx`, or delete them.
 
 ---
@@ -82,7 +82,7 @@ This is a well-intentioned architectural skeleton, but it is still too empty and
 ### 13. Fix secret management
 - Move the PostgreSQL password out of `appsettings.json`.
 - Use Secret Manager or environment variables.
-- Add `UserSecretsId` to `Conductor.Api`.
+- Add `UserSecretsId` to `Template.Api`.
 
 ### 14. Add health checks
 - `AddHealthChecks()` and a `/health` endpoint in the API.

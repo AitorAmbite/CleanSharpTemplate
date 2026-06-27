@@ -9,16 +9,16 @@ Open source alternative to VisualCron. Distributed job scheduler based on agents
 ```
 Conductor/
 ├── src/
-│   ├── Conductor.Domain/          # Entities, domain events, repository interfaces
-│   ├── Conductor.Application/     # Commands, queries, handlers (Wolverine)
-│   ├── Conductor.Infrastructure/  # EF Core, persistence, repository implementations
-│   ├── Conductor.Api/             # ASP.NET Core Minimal API host
+│   ├── Template.Domain/          # Entities, domain events, repository interfaces
+│   ├── Template.Application/     # Commands, queries, handlers (Wolverine)
+│   ├── Template.Infrastructure/  # EF Core, persistence, repository implementations
+│   ├── Template.Api/             # ASP.NET Core Minimal API host
 │   └── shared/
-│       └── Conductor.Contracts/   # Shared DTOs
+│       └── Template.Contracts/   # Shared DTOs
 ├── tests/
-│   ├── Conductor.Domain.Tests/
-│   ├── Conductor.Application.Tests/
-│   └── Conductor.Integration.Tests/
+│   ├── Template.Domain.Tests/
+│   ├── Template.Application.Tests/
+│   └── Template.Integration.Tests/
 ├── docker/
 │   └── Dockerfile
 ├── docker-compose.yml
@@ -66,7 +66,7 @@ This starts PostgreSQL and the API. The API applies pending migrations automatic
 2. Run the API:
 
    ```bash
-   dotnet run --project src/Conductor.Api
+   dotnet run --project src/Template.Api
    ```
 
 The API expects a connection string in `DatabaseConfig:ConnectionString`. By default `appsettings.Development.json` points to `localhost:5432`.
@@ -77,8 +77,8 @@ Create a new migration:
 
 ```bash
 dotnet ef migrations add <MigrationName> \
-  --project src/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
-  --startup-project src/Conductor.Api/Conductor.Api.csproj \
+  --project src/Template.Infrastructure/Template.Infrastructure.csproj \
+  --startup-project src/Template.Api/Template.Api.csproj \
   --output-dir Persistence/Migrations
 ```
 
@@ -86,8 +86,8 @@ Apply migrations locally:
 
 ```bash
 dotnet ef database update \
-  --project src/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
-  --startup-project src/Conductor.Api/Conductor.Api.csproj
+  --project src/Template.Infrastructure/Template.Infrastructure.csproj \
+  --startup-project src/Template.Api/Template.Api.csproj
 ```
 
 Migrations are applied automatically when the API starts inside Docker.
@@ -119,9 +119,9 @@ curl -X POST http://localhost:5000/todos \
 
 ## Architecture Notes
 
-- `Conductor.Domain` has no dependency on EF Core or ASP.NET Core.
-- `Conductor.Application` uses Wolverine as a mediator and returns domain events from handlers.
-- `Conductor.Infrastructure` implements repositories and EF Core configuration.
+- `Template.Domain` has no dependency on EF Core or ASP.NET Core.
+- `Template.Application` uses Wolverine as a mediator and returns domain events from handlers.
+- `Template.Infrastructure` implements repositories and EF Core configuration.
 - Wolverine is configured to use service location only for `ConductorDbContext`, because `AddDbContext` registers `DbContextOptions<T>` as an opaque lambda factory.
 
 ## License
