@@ -1,8 +1,5 @@
 <Solution>
   <Folder Name="/src/" />
-  <Folder Name="/src/agent/">
-    <Project Path="src/agent/Conductor.Agent/Conductor.Agent.csproj" />
-  </Folder>
   <Folder Name="/src/server/">
     <Project Path="src/server/Conductor.Api/Conductor.Api.csproj" />
     <Project Path="src/server/Conductor.Application/Conductor.Application.csproj" />
@@ -12,11 +9,7 @@
   <Folder Name="/src/shared/">
     <Project Path="src/shared/Conductor.Contracts/Conductor.Contracts.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
-  <Folder Name="/tests/agent/">
-    <Project Path="tests/agent/Conductor.Agent.Tests/Conductor.Agent.Tests.csproj" />
-  </Folder>
-  <Folder Name="/tests/server/">
+  <Folder Name="/tests/">
     <Project Path="tests/server/Conductor.Application.Tests/Conductor.Application.Tests.csproj" />
     <Project Path="tests/server/Conductor.Domain.Tests/Conductor.Domain.Tests.csproj" />
     <Project Path="tests/server/Conductor.Integration.Tests/Conductor.Integration.Tests.csproj" />
