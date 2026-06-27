@@ -2,60 +2,97 @@
 
 Open source alternative to VisualCron. Distributed job scheduler based on agents.
 
+> **Current scope:** backend + infrastructure. The agent and frontend are not part of this template yet.
+
 ## Structure
 
 ```
 Conductor/
 ├── src/
 │   ├── server/
-│   │   ├── Conductor.Domain/
-│   │   ├── Conductor.Application/
-│   │   ├── Conductor.Infrastructure/
-│   │   └── Conductor.Api/
-│   ├── agent/
-│   │   └── Conductor.Agent/
+│   │   ├── Conductor.Domain/          # Entities, domain events, repository interfaces
+│   │   ├── Conductor.Application/     # Commands, queries, handlers (Wolverine)
+│   │   ├── Conductor.Infrastructure/  # EF Core, persistence, repository implementations
+│   │   └── Conductor.Api/             # ASP.NET Core Minimal API host
 │   └── shared/
-│       └── Conductor.Contracts/
+│       └── Conductor.Contracts/       # Shared DTOs
 ├── tests/
-│   ├── server/
-│   └── agent/
+│   └── server/
+│       ├── Conductor.Domain.Tests/
+│       ├── Conductor.Application.Tests/
+│       └── Conductor.Integration.Tests/
 ├── docker/
-└── installer/
+│   └── Dockerfile
+├── docker-compose.yml
+├── Directory.Build.props
+├── Directory.Packages.props
+└── global.json
 ```
+
+## Stack
+
+- [.NET 10](https://dotnet.microsoft.com/download)
+- [PostgreSQL 16](https://www.postgresql.org/)
+- [Entity Framework Core 9](https://learn.microsoft.com/ef/core/)
+- [WolverineFx](https://wolverinefx.net/) (mediator + domain event routing)
+- [Mapster](https://github.com/MapsterMapper/Mapster)
+- [Scalar](https://scalar.com/) OpenAPI reference
 
 ## Prerequisites
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
-- [Docker + Docker Compose](https://docs.docker.com/get-docker/)
-- [PostgreSQL 15+](https://www.postgresql.org/) (or use the provided Docker Compose)
+- [Docker + Docker Compose](https://docs.docker.com/get-docker/) (for the provided PostgreSQL container)
 
 ## Getting Started
 
+### Run with Docker Compose
+
 ```bash
-# 1. Start PostgreSQL
-docker-compose -f docker/docker-compose.yml up -d postgres
-
-# 2. Run the API
-dotnet run --project src/server/Conductor.Api
-
-# 3. Run the agent (separate terminal)
-dotnet run --project src/agent/Conductor.Agent
+docker-compose up -d
 ```
+
+This starts PostgreSQL and the API. The API applies pending migrations automatically on startup.
+
+- API: http://localhost:5000
+- Health check: http://localhost:5000/health
+- OpenAPI (development only): http://localhost:5000/scalar/v1
+
+### Run locally
+
+1. Start PostgreSQL:
+
+   ```bash
+   docker-compose up -d postgres
+   ```
+
+2. Run the API:
+
+   ```bash
+   dotnet run --project src/server/Conductor.Api
+   ```
+
+The API expects a connection string in `DatabaseConfig:ConnectionString`. By default `appsettings.Development.json` points to `localhost:5432`.
 
 ## Database Migrations
 
+Create a new migration:
+
 ```bash
-# Create a new migration
 dotnet ef migrations add <MigrationName> \
   --project src/server/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
   --startup-project src/server/Conductor.Api/Conductor.Api.csproj \
   --output-dir Persistence/Migrations
+```
 
-# Apply migrations
+Apply migrations locally:
+
+```bash
 dotnet ef database update \
   --project src/server/Conductor.Infrastructure/Conductor.Infrastructure.csproj \
   --startup-project src/server/Conductor.Api/Conductor.Api.csproj
 ```
+
+Migrations are applied automatically when the API starts inside Docker.
 
 ## Build & Test
 
@@ -63,6 +100,31 @@ dotnet ef database update \
 dotnet build
 dotnet test
 ```
+
+Integration tests use Testcontainers to spin up a throwaway PostgreSQL container, so Docker must be running.
+
+## API Endpoints
+
+| Method | Endpoint      | Description                   |
+|--------|---------------|-------------------------------|
+| GET    | `/health`     | Database health check         |
+| GET    | `/todos`      | Paginated list of todos       |
+| POST   | `/todos`      | Create a new todo             |
+
+Example:
+
+```bash
+curl -X POST http://localhost:5000/todos \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Buy milk"}'
+```
+
+## Architecture Notes
+
+- `Conductor.Domain` has no dependency on EF Core or ASP.NET Core.
+- `Conductor.Application` uses Wolverine as a mediator and returns domain events from handlers.
+- `Conductor.Infrastructure` implements repositories and EF Core configuration.
+- Wolverine is configured to use service location only for `ConductorDbContext`, because `AddDbContext` registers `DbContextOptions<T>` as an opaque lambda factory.
 
 ## License
 
