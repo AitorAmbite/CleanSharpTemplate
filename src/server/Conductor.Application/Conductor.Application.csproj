@@ -2,23 +2,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Conductor.Domain\Conductor.Domain.csproj" />
+    <ProjectReference Include="..\..\shared\Conductor.Contracts\Conductor.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mapster" Version="7.4.0" />
-    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
-    <PackageReference Include="Quartz" Version="3.18.1" />
-    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.18.1" />
-    <PackageReference Include="Quartz.Serialization.SystemTextJson" Version="3.18.1" />
-    <PackageReference Include="WolverineFx" Version="6.8.0" />
-    <PackageReference Include="WolverineFx.RuntimeCompilation" Version="6.8.0" />
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="Mapster.DependencyInjection" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
+    <PackageReference Include="WolverineFx" />
+    <PackageReference Include="WolverineFx.RuntimeCompilation" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
 
 </Project>

@@ -6,7 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Conductor.Application.Configuration;
 using Conductor.Domain;
+using Conductor.Domain.Repositories;
 using Conductor.Infrastructure.Persistence;
+using Conductor.Infrastructure.Persistence.Interceptors;
+using Conductor.Infrastructure.Persistence.Repositories;
 
 public static class DependencyInjection
 {
@@ -18,27 +21,18 @@ public static class DependencyInjection
         {
             var databaseConfig = serviceProvider.GetRequiredService<IOptions<DatabaseConfig>>().Value;
 
-            switch (databaseConfig.Type)
-            {
-                case DatabaseType.Sqlite:
-                    options.UseSqlite(databaseConfig.ConnectionString);
-                    break;
-                case DatabaseType.Postgres:
+                options.UseNpgsql(
+                    databaseConfig.ConnectionString,
+                    npgsqlOptions =>
                     {
-                        options.UseNpgsql(
-                            databaseConfig.ConnectionString,
-                            npgsqlOptions =>
-                            {
-                                npgsqlOptions.MigrationsAssembly(typeof(ConductorDbContext).Assembly.FullName);
-                            });
-                        break;
-                    }
-                default:
-                    throw new InvalidOperationException($"Database type '{databaseConfig.Type}' is not supported.");
-            }
+                        npgsqlOptions.MigrationsAssembly(typeof(ConductorDbContext).Assembly.FullName);
+                    });
+
+                options.AddInterceptors(new EntityAuditInterceptor());
         });
 
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ConductorDbContext>());
+        services.AddScoped<IUnitOfWork, EfUnitOfWork>();
+        services.AddScoped<ITodoRepository, TodoRepository>();
 
         return services;
     }
