@@ -1,10 +1,13 @@
 namespace Conductor.Infrastructure.Persistence;
 
 using Conductor.Domain;
+using Conductor.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 public class ConductorDbContext : DbContext, IUnitOfWork
 {
+    public DbSet<Todo> Todos => Set<Todo>();
+
     public ConductorDbContext(DbContextOptions<ConductorDbContext> options)
         : base(options)
     {
