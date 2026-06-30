@@ -10,27 +10,29 @@ public static class TodoEndpoints
 {
     public static IEndpointRouteBuilder MapTodoEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/todos", async (
-            IMessageBus bus,
-            int page = 1,
-            int pageSize = 10,
-            CancellationToken cancellationToken = default) =>
-        {
-            var query = new GetTodosQuery(page, pageSize);
-            return await bus.InvokeAsync<PaginatedList<TodoDto>>(query, cancellationToken);
-        })
+        app.MapGet("/todos", Get)
         .WithName("GetTodos");
 
-        app.MapPost("/todos", async (
-            CreateTodoCommand command,
-            IMessageBus bus,
-            CancellationToken cancellationToken = default) =>
-        {
-            var @event = await bus.InvokeAsync<TodoCreated>(command, cancellationToken);
-            return Results.Created($"/todos/{@event.TodoId}", @event);
-        })
+        app.MapPost("/todos", Create)
         .WithName("CreateTodo");
 
         return app;
+    }
+    private static async Task<IResult> Create(CreateTodoCommand command,
+            IMessageBus bus,
+            CancellationToken cancellationToken = default)
+    {
+        var @event = await bus.InvokeAsync<TodoCreated>(command, cancellationToken);
+        return Results.Created($"/todos/{@event.TodoId}", @event);
+    }
+
+    private static async Task<PaginatedList<TodoDto>> Get(
+        IMessageBus bus,
+        int page = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetTodosQuery(page, pageSize);
+        return await bus.InvokeAsync<PaginatedList<TodoDto>>(query, cancellationToken);
     }
 }
