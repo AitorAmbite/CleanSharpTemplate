@@ -17,7 +17,7 @@ public static class DependencyInjection
     {
         services.Configure<DatabaseConfig>(configuration.GetSection("DatabaseConfig"));
 
-        services.AddDbContext<ConductorDbContext>((serviceProvider, options) =>
+        services.AddDbContext<AppDbContext>((serviceProvider, options) =>
         {
             var databaseConfig = serviceProvider.GetRequiredService<IOptions<DatabaseConfig>>().Value;
 
@@ -25,7 +25,7 @@ public static class DependencyInjection
                 databaseConfig.ConnectionString,
                 npgsqlOptions =>
                 {
-                    npgsqlOptions.MigrationsAssembly(typeof(ConductorDbContext).Assembly.FullName);
+                    npgsqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
                 });
 
             options.AddInterceptors(new EntityAuditInterceptor());

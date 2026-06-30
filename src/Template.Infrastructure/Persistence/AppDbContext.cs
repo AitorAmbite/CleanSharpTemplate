@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Template.Domain;
 using Template.Domain.Entities;
 
-public class ConductorDbContext : DbContext, IUnitOfWork
+public class AppDbContext : DbContext, IUnitOfWork
 {
     public DbSet<Todo> Todos => Set<Todo>();
 
-    public ConductorDbContext(DbContextOptions<ConductorDbContext> options)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
     }
@@ -18,6 +18,6 @@ public class ConductorDbContext : DbContext, IUnitOfWork
         base.OnModelCreating(modelBuilder);
 
         // Apply all entity configurations from the current assembly
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ConductorDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

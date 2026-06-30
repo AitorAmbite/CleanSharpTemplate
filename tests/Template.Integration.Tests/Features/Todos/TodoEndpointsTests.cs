@@ -19,7 +19,7 @@ public class TodoEndpointsTests : IAsyncLifetime
     public TodoEndpointsTests()
     {
         _postgres = new PostgreSqlBuilder("postgres:16-alpine")
-            .WithDatabase("conductor")
+            .WithDatabase("template")
             .WithUsername("postgres")
             .WithPassword("postgres")
             .Build();
@@ -33,7 +33,7 @@ public class TodoEndpointsTests : IAsyncLifetime
         _factory.ConnectionString = _postgres.GetConnectionString();
 
         await using var scope = _factory.Services.CreateAsyncScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ConductorDbContext>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await dbContext.Database.MigrateAsync();
     }
 

@@ -1,13 +1,13 @@
-# Conductor
+# .NET Clean Architecture Template
 
-Open source alternative to VisualCron. Distributed job scheduler based on agents.
+Backend template built with .NET, PostgreSQL, EF Core and Wolverine.
 
-> **Current scope:** backend + infrastructure. The agent and frontend are not part of this template yet.
+> **Current scope:** backend + infrastructure. Frontend is not part of this template yet.
 
 ## Structure
 
 ```
-Conductor/
+.
 ├── src/
 │   ├── Template.Domain/          # Entities, domain events, repository interfaces
 │   ├── Template.Application/     # Commands, queries, handlers (Wolverine)
@@ -122,7 +122,7 @@ curl -X POST http://localhost:5000/todos \
 - `Template.Domain` has no dependency on EF Core or ASP.NET Core.
 - `Template.Application` uses Wolverine as a mediator and returns domain events from handlers.
 - `Template.Infrastructure` implements repositories and EF Core configuration.
-- Wolverine is configured to use service location only for `ConductorDbContext`, because `AddDbContext` registers `DbContextOptions<T>` as an opaque lambda factory.
+- Wolverine is configured to use service location only for `AppDbContext`, because `AddDbContext` registers `DbContextOptions<T>` as an opaque lambda factory.
 
 ## License
 

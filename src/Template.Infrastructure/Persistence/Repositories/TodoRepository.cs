@@ -5,7 +5,7 @@ using Template.Domain.Repositories;
 
 public class TodoRepository : Repository<Todo>, ITodoRepository
 {
-    public TodoRepository(ConductorDbContext dbContext)
+    public TodoRepository(AppDbContext dbContext)
         : base(dbContext)
     {
     }

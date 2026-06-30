@@ -15,7 +15,7 @@ public class EntityAuditInterceptorTests : IAsyncLifetime
     public EntityAuditInterceptorTests()
     {
         _postgres = new PostgreSqlBuilder("postgres:16-alpine")
-            .WithDatabase("conductor")
+            .WithDatabase("template")
             .WithUsername("postgres")
             .WithPassword("postgres")
             .Build();
@@ -29,7 +29,7 @@ public class EntityAuditInterceptorTests : IAsyncLifetime
         _factory.ConnectionString = _postgres.GetConnectionString();
 
         await using var scope = _factory.Services.CreateAsyncScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ConductorDbContext>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await dbContext.Database.MigrateAsync();
     }
 
@@ -43,7 +43,7 @@ public class EntityAuditInterceptorTests : IAsyncLifetime
     public async Task SaveChangesAsync_Sets_UpdatedAt_On_Modified_Entity()
     {
         await using var scope = _factory.Services.CreateAsyncScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ConductorDbContext>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         var todo = new Todo("Audit test");
         await dbContext.Todos.AddAsync(todo);

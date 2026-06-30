@@ -18,7 +18,7 @@ builder.Host.AddApplication(opts =>
     // EF Core registers DbContextOptions<T> as an opaque lambda factory, so Wolverine
     // cannot generate a constructor for handlers that depend on the DbContext directly
     // or indirectly. We opt the DbContext itself into service location only.
-    opts.CodeGeneration.AlwaysUseServiceLocationFor<ConductorDbContext>();
+    opts.CodeGeneration.AlwaysUseServiceLocationFor<AppDbContext>();
 });
 
 builder.Services.AddOpenApi();
@@ -40,7 +40,7 @@ var app = builder.Build();
 // Apply pending migrations with retry for container startup
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ConductorDbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await dbContext.Database.MigrateAsync();
 }
 

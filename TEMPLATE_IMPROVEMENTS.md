@@ -1,4 +1,4 @@
-# Template Review — Conductor Backend Template
+# Template Review — .NET Backend Template
 
 > Review date: 2026-06-27  
 > Branch: `Template`  

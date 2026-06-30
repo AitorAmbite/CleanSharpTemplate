@@ -1,11 +1,11 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: conductor-postgres
+    container_name: template-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: conductor
+      POSTGRES_DB: template
     ports:
       - "5432:5432"
     volumes:
@@ -15,10 +15,10 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    container_name: conductor-api
+    container_name: template-api
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      DatabaseConfig__ConnectionString: Host=postgres;Port=5432;Database=conductor;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      DatabaseConfig__ConnectionString: Host=postgres;Port=5432;Database=template;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
     ports:
       - "5000:5000"
     depends_on:

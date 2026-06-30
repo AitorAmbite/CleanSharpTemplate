@@ -4,9 +4,9 @@ using Template.Domain;
 
 public class EfUnitOfWork : IUnitOfWork
 {
-    private readonly ConductorDbContext _dbContext;
+    private readonly AppDbContext _dbContext;
 
-    public EfUnitOfWork(ConductorDbContext dbContext)
+    public EfUnitOfWork(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }

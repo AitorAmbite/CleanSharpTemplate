@@ -5,9 +5,9 @@ using Template.Infrastructure.Persistence;
 
 public class DatabaseHealthCheck : IHealthCheck
 {
-    private readonly ConductorDbContext _dbContext;
+    private readonly AppDbContext _dbContext;
 
-    public DatabaseHealthCheck(ConductorDbContext dbContext)
+    public DatabaseHealthCheck(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }

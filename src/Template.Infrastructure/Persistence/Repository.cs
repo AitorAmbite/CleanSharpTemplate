@@ -8,10 +8,10 @@ using Template.Domain.Repositories;
 public abstract class Repository<T> : IRepository<T>
     where T : Entity
 {
-    protected readonly ConductorDbContext DbContext;
+    protected readonly AppDbContext DbContext;
     protected readonly DbSet<T> DbSet;
 
-    protected Repository(ConductorDbContext dbContext)
+    protected Repository(AppDbContext dbContext)
     {
         DbContext = dbContext;
         DbSet = dbContext.Set<T>();
