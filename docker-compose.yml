@@ -17,6 +17,7 @@ services:
       dockerfile: docker/Dockerfile
     container_name: conductor-api
     environment:
+      ASPNETCORE_ENVIRONMENT: Development
       DatabaseConfig__ConnectionString: Host=postgres;Port=5432;Database=conductor;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
     ports:
       - "5000:5000"
