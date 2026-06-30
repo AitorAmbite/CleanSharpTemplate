@@ -1,8 +1,8 @@
 namespace Template.Infrastructure.Persistence;
 
+using Microsoft.EntityFrameworkCore;
 using Template.Domain;
 using Template.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 public class ConductorDbContext : DbContext, IUnitOfWork
 {

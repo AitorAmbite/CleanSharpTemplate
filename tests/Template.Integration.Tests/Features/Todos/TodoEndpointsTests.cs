@@ -2,13 +2,13 @@ namespace Template.Integration.Tests.Features.Todos;
 
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Template.Contracts.Todos;
 using Template.Domain.Common;
 using Template.Domain.Events;
 using Template.Infrastructure.Persistence;
 using Template.Integration.Tests.Fixtures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
 public class TodoEndpointsTests : IAsyncLifetime

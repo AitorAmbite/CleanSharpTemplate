@@ -1,7 +1,7 @@
 namespace Template.Application.Features.Todos;
 
-using Template.Domain.Events;
 using Microsoft.Extensions.Logging;
+using Template.Domain.Events;
 
 public class TodoCreatedHandler
 {

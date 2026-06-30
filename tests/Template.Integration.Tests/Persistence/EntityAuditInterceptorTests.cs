@@ -1,10 +1,10 @@
 namespace Template.Integration.Tests.Persistence;
 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Template.Domain.Entities;
 using Template.Infrastructure.Persistence;
 using Template.Integration.Tests.Fixtures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
 public class EntityAuditInterceptorTests : IAsyncLifetime

@@ -1,9 +1,9 @@
 namespace Template.Infrastructure.Persistence.Interceptors;
 
-using Template.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Template.Domain.Common;
 
 public class EntityAuditInterceptor : SaveChangesInterceptor
 {

@@ -1,11 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using Template.Api.Features.Todos;
 using Template.Api.Health;
 using Template.Api.Middleware;
 using Template.Application;
 using Template.Infrastructure;
 using Template.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

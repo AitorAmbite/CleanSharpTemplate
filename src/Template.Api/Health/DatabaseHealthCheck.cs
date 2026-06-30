@@ -1,7 +1,7 @@
 namespace Template.Api.Health;
 
-using Template.Infrastructure.Persistence;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Template.Infrastructure.Persistence;
 
 public class DatabaseHealthCheck : IHealthCheck
 {
