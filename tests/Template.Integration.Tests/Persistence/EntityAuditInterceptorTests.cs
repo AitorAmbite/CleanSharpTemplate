@@ -33,10 +33,10 @@ public class EntityAuditInterceptorTests : IAsyncLifetime
         await dbContext.Database.MigrateAsync();
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        _factory.Dispose();
-        return _postgres.DisposeAsync().AsTask();
+        await _factory.DisposeAsync();
+        await _postgres.DisposeAsync();
     }
 
     [Fact]

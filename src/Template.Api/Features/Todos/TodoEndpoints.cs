@@ -10,24 +10,26 @@ public static class TodoEndpoints
 {
     public static IEndpointRouteBuilder MapTodoEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/todos", Get)
-        .WithName("GetTodos");
+        app.MapGet("/todos", GetTodosAsync)
+            .WithName("GetTodos");
 
-        app.MapPost("/todos", Create)
-        .WithName("CreateTodo");
+        app.MapPost("/todos", CreateTodoAsync)
+            .WithName("CreateTodo");
 
         return app;
     }
-    private static async Task<IResult> Create(CreateTodoCommand command,
-            IMessageBus bus,
-            CancellationToken cancellationToken = default)
+
+    private static async Task<IResult> CreateTodoAsync(
+        CreateTodoCommand command,
+        IMessageBus bus,
+        CancellationToken cancellationToken = default)
     {
         var @event = await bus.InvokeAsync<TodoCreated>(command, cancellationToken);
         var response = new CreateTodoResponse(@event.TodoId, @event.Title);
         return Results.Created($"/todos/{@event.TodoId}", response);
     }
 
-    private static async Task<PaginatedList<TodoDto>> Get(
+    private static async Task<PaginatedList<TodoDto>> GetTodosAsync(
         IMessageBus bus,
         int page = 1,
         int pageSize = 10,

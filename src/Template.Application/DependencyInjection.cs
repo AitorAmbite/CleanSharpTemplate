@@ -25,8 +25,13 @@ public static class DependencyInjection
 
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddMapster();
-        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton);
+        TypeAdapterConfig typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
+        typeAdapterConfig.Scan(typeof(DependencyInjection).Assembly);
+        services.AddSingleton(typeAdapterConfig);
+
+        services.AddValidatorsFromAssembly(
+            typeof(DependencyInjection).Assembly,
+            Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton);
 
         return services;
     }
