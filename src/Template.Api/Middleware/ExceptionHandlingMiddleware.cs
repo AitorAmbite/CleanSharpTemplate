@@ -1,6 +1,7 @@
 namespace Template.Api.Middleware;
 
 using System.Net;
+using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,8 +36,6 @@ public class ExceptionHandlingMiddleware
 
     private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        context.Response.ContentType = "application/problem+json";
-
         switch (exception)
         {
             case ValidationException validationException:
@@ -81,7 +80,7 @@ public class ExceptionHandlingMiddleware
             }
         }
 
-        return context.Response.WriteAsJsonAsync(problemDetails);
+        return context.Response.WriteAsJsonAsync(problemDetails, (JsonSerializerOptions?)null, "application/problem+json", context.RequestAborted);
     }
 
     private static Task WriteProblemAsync(HttpContext context, string title, string detail)
@@ -94,6 +93,6 @@ public class ExceptionHandlingMiddleware
             Instance = context.Request.Path,
         };
 
-        return context.Response.WriteAsJsonAsync(problemDetails);
+        return context.Response.WriteAsJsonAsync(problemDetails, (JsonSerializerOptions?)null, "application/problem+json", context.RequestAborted);
     }
 }
