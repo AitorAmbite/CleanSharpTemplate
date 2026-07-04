@@ -7,6 +7,13 @@ using Template.Domain.Common;
 
 public class EntityAuditInterceptor : SaveChangesInterceptor
 {
+    private readonly TimeProvider _timeProvider;
+
+    public EntityAuditInterceptor(TimeProvider timeProvider)
+    {
+        _timeProvider = timeProvider;
+    }
+
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
         UpdateAuditableEntities(eventData.Context);
@@ -22,20 +29,27 @@ public class EntityAuditInterceptor : SaveChangesInterceptor
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
-    private static void UpdateAuditableEntities(DbContext? context)
+    private void UpdateAuditableEntities(DbContext? context)
     {
         if (context is null)
         {
             return;
         }
 
-        IEnumerable<EntityEntry<Entity>> modifiedEntries = context.ChangeTracker
-            .Entries<Entity>()
-            .Where(entry => entry.State == EntityState.Modified);
+        DateTime utcNow = _timeProvider.GetUtcNow().UtcDateTime;
 
-        foreach (EntityEntry<Entity> entry in modifiedEntries)
+        foreach (EntityEntry<Entity> entry in context.ChangeTracker.Entries<Entity>())
         {
-            entry.Entity.UpdatedAt = DateTime.UtcNow;
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = utcNow;
+                    entry.Entity.UpdatedAt = utcNow;
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.UpdatedAt = utcNow;
+                    break;
+            }
         }
     }
 }

@@ -17,6 +17,9 @@ public static class DependencyInjection
     {
         services.Configure<DatabaseConfig>(configuration.GetSection("DatabaseConfig"));
 
+        services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<EntityAuditInterceptor>();
+
         services.AddDbContext<AppDbContext>((serviceProvider, options) =>
         {
             var databaseConfig = serviceProvider.GetRequiredService<IOptions<DatabaseConfig>>().Value;
@@ -28,7 +31,8 @@ public static class DependencyInjection
                     npgsqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
                 });
 
-            options.AddInterceptors(new EntityAuditInterceptor());
+            var auditInterceptor = serviceProvider.GetRequiredService<EntityAuditInterceptor>();
+            options.AddInterceptors(auditInterceptor);
         });
 
         services.AddScoped<IUnitOfWork, EfUnitOfWork>();

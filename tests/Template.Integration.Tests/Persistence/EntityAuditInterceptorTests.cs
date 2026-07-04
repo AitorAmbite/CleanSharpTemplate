@@ -40,7 +40,7 @@ public class EntityAuditInterceptorTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task SaveChangesAsync_Sets_UpdatedAt_On_Modified_Entity()
+    public async Task SaveChangesAsync_Sets_Audit_Timestamps_On_Added_And_Modified_Entity()
     {
         await using var scope = _factory.Services.CreateAsyncScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -49,11 +49,16 @@ public class EntityAuditInterceptorTests : IAsyncLifetime
         await dbContext.Todos.AddAsync(todo);
         await dbContext.SaveChangesAsync();
 
-        Assert.Null(todo.UpdatedAt);
+        Assert.NotEqual(DateTime.MinValue, todo.CreatedAt);
+        Assert.Equal(todo.CreatedAt, todo.UpdatedAt);
+
+        DateTime addedUpdatedAt = todo.UpdatedAt!.Value;
+        System.Threading.Thread.Sleep(10);
 
         todo.Complete();
         await dbContext.SaveChangesAsync();
 
         Assert.NotNull(todo.UpdatedAt);
+        Assert.True(todo.UpdatedAt > addedUpdatedAt);
     }
 }
