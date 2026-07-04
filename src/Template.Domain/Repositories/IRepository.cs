@@ -1,5 +1,6 @@
 namespace Template.Domain.Repositories;
 
+using Template.Contracts;
 using Template.Domain.Common;
 
 public interface IRepository<T>

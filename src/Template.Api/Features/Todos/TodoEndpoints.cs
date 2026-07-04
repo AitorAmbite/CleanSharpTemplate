@@ -1,8 +1,8 @@
 namespace Template.Api.Features.Todos;
 
 using Template.Application.Features.Todos;
+using Template.Contracts;
 using Template.Contracts.Todos;
-using Template.Domain.Common;
 using Template.Domain.Events;
 using Wolverine;
 
@@ -23,7 +23,8 @@ public static class TodoEndpoints
             CancellationToken cancellationToken = default)
     {
         var @event = await bus.InvokeAsync<TodoCreated>(command, cancellationToken);
-        return Results.Created($"/todos/{@event.TodoId}", @event);
+        var response = new CreateTodoResponse(@event.TodoId, @event.Title);
+        return Results.Created($"/todos/{@event.TodoId}", response);
     }
 
     private static async Task<PaginatedList<TodoDto>> Get(

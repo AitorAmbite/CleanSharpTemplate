@@ -1,4 +1,4 @@
-namespace Template.Domain.Common;
+namespace Template.Contracts;
 
 public class PaginatedList<T>
 {

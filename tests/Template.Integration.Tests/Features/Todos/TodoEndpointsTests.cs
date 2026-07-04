@@ -4,9 +4,8 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Template.Contracts;
 using Template.Contracts.Todos;
-using Template.Domain.Common;
-using Template.Domain.Events;
 using Template.Infrastructure.Persistence;
 using Template.Integration.Tests.Fixtures;
 using Testcontainers.PostgreSql;
@@ -44,7 +43,7 @@ public class TodoEndpointsTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task CreateTodo_Returns_Created_With_TodoCreated_Event()
+    public async Task CreateTodo_Returns_Created_With_CreateTodoResponse()
     {
         var client = _factory.CreateClient();
         var command = new { Title = "Integration test todo" };
@@ -52,10 +51,10 @@ public class TodoEndpointsTests : IAsyncLifetime
         var response = await client.PostAsJsonAsync("/todos", command);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var @event = await response.Content.ReadFromJsonAsync<TodoCreated>();
-        Assert.NotNull(@event);
-        Assert.Equal("Integration test todo", @event.Title);
-        Assert.NotEqual(Guid.Empty, @event.TodoId);
+        var body = await response.Content.ReadFromJsonAsync<CreateTodoResponse>();
+        Assert.NotNull(body);
+        Assert.Equal("Integration test todo", body!.Title);
+        Assert.NotEqual(Guid.Empty, body.Id);
     }
 
     [Fact]
