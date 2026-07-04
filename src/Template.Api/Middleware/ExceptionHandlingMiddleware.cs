@@ -1,17 +1,23 @@
 namespace Template.Api.Middleware;
 
 using System.Net;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+    private readonly IHostEnvironment _hostEnvironment;
 
-    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+    public ExceptionHandlingMiddleware(
+        RequestDelegate next,
+        ILogger<ExceptionHandlingMiddleware> logger,
+        IHostEnvironment hostEnvironment)
     {
         _next = next;
         _logger = logger;
+        _hostEnvironment = hostEnvironment;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -27,16 +33,64 @@ public class ExceptionHandlingMiddleware
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/problem+json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
+        switch (exception)
+        {
+            case ValidationException validationException:
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return WriteValidationProblemAsync(context, validationException);
+
+            case ArgumentException:
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return WriteProblemAsync(context, "Bad Request", exception.Message);
+
+            case KeyNotFoundException:
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return WriteProblemAsync(context, "Not Found", exception.Message);
+
+            default:
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                string detail = _hostEnvironment.IsDevelopment()
+                    ? exception.Message
+                    : "An unexpected error occurred.";
+                return WriteProblemAsync(context, "Internal Server Error", detail);
+        }
+    }
+
+    private static Task WriteValidationProblemAsync(HttpContext context, ValidationException exception)
+    {
+        var problemDetails = new ValidationProblemDetails
+        {
+            Title = "Validation Failed",
+            Status = context.Response.StatusCode,
+        };
+
+        foreach (FluentValidation.Results.ValidationFailure failure in exception.Errors)
+        {
+            string key = failure.PropertyName;
+            if (problemDetails.Errors.TryGetValue(key, out string[]? existing) && existing is not null)
+            {
+                problemDetails.Errors[key] = [.. existing, failure.ErrorMessage];
+            }
+            else
+            {
+                problemDetails.Errors[key] = [failure.ErrorMessage];
+            }
+        }
+
+        return context.Response.WriteAsJsonAsync(problemDetails);
+    }
+
+    private static Task WriteProblemAsync(HttpContext context, string title, string detail)
+    {
         var problemDetails = new ProblemDetails
         {
-            Title = "Internal Server Error",
+            Title = title,
             Status = context.Response.StatusCode,
-            Detail = exception.Message,
+            Detail = detail,
             Instance = context.Request.Path,
         };
 
