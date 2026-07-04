@@ -5,10 +5,13 @@
 
   <ItemGroup>
     <!-- Application -->
+    <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageVersion Include="Mapster" Version="7.4.0" />
     <PackageVersion Include="Mapster.DependencyInjection" Version="1.0.1" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="5.0.0" />
     <PackageVersion Include="WolverineFx" Version="6.15.0" />
+    <PackageVersion Include="WolverineFx.FluentValidation" Version="6.15.0" />
     <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="6.15.0" />
 
     <!-- Api -->

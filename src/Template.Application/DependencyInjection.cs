@@ -1,9 +1,11 @@
 namespace Template.Application;
 
+using FluentValidation;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
+using Wolverine.FluentValidation;
 
 public static class DependencyInjection
 {
@@ -15,6 +17,7 @@ public static class DependencyInjection
         {
             opts.Durability.Mode = DurabilityMode.MediatorOnly;
             opts.Discovery.IncludeAssembly(typeof(DependencyInjection).Assembly);
+            opts.UseFluentValidation();
             configureOptions?.Invoke(opts);
         });
         return hostBuilder;
@@ -23,6 +26,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddMapster();
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton);
 
         return services;
     }

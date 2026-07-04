@@ -2,6 +2,7 @@ namespace Template.Integration.Tests.Features.Todos;
 
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Template.Contracts;
@@ -72,5 +73,29 @@ public class TodoEndpointsTests : IAsyncLifetime
         Assert.True(result.TotalCount >= 2);
         Assert.Contains(result.Items, dto => dto.Title == "First");
         Assert.Contains(result.Items, dto => dto.Title == "Second");
+    }
+
+    [Fact]
+    public async Task CreateTodo_With_Empty_Title_Returns_BadRequest_With_ValidationProblem()
+    {
+        var client = _factory.CreateClient();
+        var command = new { Title = "" };
+
+        var response = await client.PostAsJsonAsync("/todos", command);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        Assert.NotNull(problem);
+        Assert.Contains("Title", problem!.Errors.Keys);
+    }
+
+    [Fact]
+    public async Task GetTodos_With_Invalid_Pagination_Returns_BadRequest()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("/todos?page=0&pageSize=200");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 }
