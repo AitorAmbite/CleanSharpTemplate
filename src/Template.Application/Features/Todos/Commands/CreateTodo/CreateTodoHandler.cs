@@ -1,5 +1,6 @@
 namespace Template.Application.Features.Todos;
 
+using Template.Contracts.Todos;
 using Template.Domain;
 using Template.Domain.Entities;
 using Template.Domain.Events;
@@ -16,13 +17,18 @@ public class CreateTodoHandler
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<TodoCreated> Handle(CreateTodoCommand command, CancellationToken cancellationToken)
+    public async Task<(CreateTodoResponse Response, TodoCreated Event)> Handle(
+        CreateTodoCommand command,
+        CancellationToken cancellationToken)
     {
         var todo = new Todo(command.Title);
 
         await _todoRepository.AddAsync(todo, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new TodoCreated(todo.Id, todo.Title);
+        var response = new CreateTodoResponse(todo.Id, todo.Title);
+        var @event = new TodoCreated(todo.Id, todo.Title);
+
+        return (response, @event);
     }
 }

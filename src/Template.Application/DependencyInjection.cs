@@ -15,7 +15,11 @@ public static class DependencyInjection
     {
         hostBuilder.UseWolverine(opts =>
         {
-            opts.Durability.Mode = DurabilityMode.MediatorOnly;
+            // Solo durability mode: local queues are enabled (so cascading messages from
+            // command handlers actually reach their handlers) but no external broker or
+            // message storage is required. Switch to DurabilityMode.MediatorOnly if you
+            // only want pure request/reply and can shed the durability runtime overhead.
+            opts.Durability.Mode = DurabilityMode.Solo;
             opts.Discovery.IncludeAssembly(typeof(DependencyInjection).Assembly);
             opts.UseFluentValidation();
             configureOptions?.Invoke(opts);

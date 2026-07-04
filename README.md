@@ -120,7 +120,7 @@ curl -X POST http://localhost:5000/todos \
 ## Architecture Notes
 
 - `Template.Domain` has no dependency on EF Core or ASP.NET Core.
-- `Template.Application` uses Wolverine as a mediator and returns domain events from handlers.
+- `Template.Application` uses Wolverine as a mediator. Command handlers return `(Response, DomainEvent)` tuples and Wolverine cascades the event to its handler through local queues, while the response goes back to the caller as the `InvokeAsync<TResponse>` reply. The host runs in Wolverine's default `Solo` durability mode (local queues, no broker required). Switch to `DurabilityMode.MediatorOnly` from the composition root only if you want pure request/reply without cascading.
 - `Template.Infrastructure` implements repositories and EF Core configuration.
 - Wolverine is configured to use service location only for `AppDbContext`, because `AddDbContext` registers `DbContextOptions<T>` as an opaque lambda factory.
 
