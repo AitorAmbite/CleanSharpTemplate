@@ -31,7 +31,7 @@ Backend template built with .NET, PostgreSQL, EF Core and Wolverine.
 
 - [.NET 10](https://dotnet.microsoft.com/download)
 - [PostgreSQL 16](https://www.postgresql.org/)
-- [Entity Framework Core 9](https://learn.microsoft.com/ef/core/)
+- [Entity Framework Core 10](https://learn.microsoft.com/ef/core/)
 - [WolverineFx](https://wolverinefx.net/) (mediator + domain event routing)
 - [Mapster](https://github.com/MapsterMapper/Mapster)
 - [Scalar](https://scalar.com/) OpenAPI reference
