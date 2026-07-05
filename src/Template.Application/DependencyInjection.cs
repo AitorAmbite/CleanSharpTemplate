@@ -35,7 +35,7 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(
             typeof(DependencyInjection).Assembly,
-            Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton);
+            Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient);
 
         return services;
     }

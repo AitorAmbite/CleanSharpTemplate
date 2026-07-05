@@ -1,4 +1,4 @@
-namespace Template.Application.Features.Todos;
+namespace Template.Application.Features.Todos.Queries.GetTodos;
 
 using Template.Contracts;
 using Template.Contracts.Todos;

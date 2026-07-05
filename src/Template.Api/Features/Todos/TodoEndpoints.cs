@@ -1,6 +1,7 @@
 namespace Template.Api.Features.Todos;
 
-using Template.Application.Features.Todos;
+using Template.Application.Features.Todos.Commands.CreateTodo;
+using Template.Application.Features.Todos.Queries.GetTodos;
 using Template.Contracts;
 using Template.Contracts.Todos;
 using Wolverine;

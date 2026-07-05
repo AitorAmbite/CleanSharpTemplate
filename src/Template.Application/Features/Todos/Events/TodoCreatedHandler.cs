@@ -1,4 +1,4 @@
-namespace Template.Application.Features.Todos;
+namespace Template.Application.Features.Todos.Events;
 
 using Microsoft.Extensions.Logging;
 using Template.Domain.Events;

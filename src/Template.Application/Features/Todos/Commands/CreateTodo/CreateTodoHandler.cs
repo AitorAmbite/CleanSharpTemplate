@@ -1,4 +1,4 @@
-namespace Template.Application.Features.Todos;
+namespace Template.Application.Features.Todos.Commands.CreateTodo;
 
 using Template.Contracts.Todos;
 using Template.Domain;

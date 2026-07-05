@@ -1,7 +1,7 @@
 namespace Template.Application.Tests.Events;
 
 using Microsoft.Extensions.Logging;
-using Template.Application.Features.Todos;
+using Template.Application.Features.Todos.Events;
 using Template.Domain.Events;
 
 public class TodoCreatedHandlerTests

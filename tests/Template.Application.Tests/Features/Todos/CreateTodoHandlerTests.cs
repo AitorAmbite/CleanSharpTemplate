@@ -1,6 +1,6 @@
 namespace Template.Application.Tests.Features.Todos;
 
-using Template.Application.Features.Todos;
+using Template.Application.Features.Todos.Commands.CreateTodo;
 using Template.Application.Tests.Fakes;
 using Template.Contracts.Todos;
 using Template.Domain.Events;
