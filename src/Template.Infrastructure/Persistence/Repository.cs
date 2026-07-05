@@ -2,7 +2,6 @@ namespace Template.Infrastructure.Persistence;
 
 using Mapster;
 using Microsoft.EntityFrameworkCore;
-using Template.Contracts;
 using Template.Domain.Common;
 using Template.Domain.Repositories;
 

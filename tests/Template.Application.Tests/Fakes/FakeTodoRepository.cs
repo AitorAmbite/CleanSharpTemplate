@@ -1,7 +1,7 @@
 namespace Template.Application.Tests.Fakes;
 
 using Mapster;
-using Template.Contracts;
+using Template.Domain.Common;
 using Template.Domain.Entities;
 using Template.Domain.Repositories;
 

@@ -1,7 +1,7 @@
 namespace Template.Application.Features.Todos.Queries.GetTodos;
 
-using Template.Contracts;
 using Template.Contracts.Todos;
+using Template.Domain.Common;
 using Template.Domain.Repositories;
 
 public class GetTodosQueryHandler

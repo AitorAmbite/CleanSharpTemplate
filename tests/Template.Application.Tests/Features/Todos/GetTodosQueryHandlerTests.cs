@@ -3,6 +3,7 @@ namespace Template.Application.Tests.Features.Todos;
 using Template.Application.Features.Todos.Queries.GetTodos;
 using Template.Application.Tests.Fakes;
 using Template.Contracts.Todos;
+using Template.Domain.Common;
 using Template.Domain.Entities;
 
 public class GetTodosQueryHandlerTests
