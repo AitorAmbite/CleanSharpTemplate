@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Template.Api.Features.Auth;
 using Template.Api.Features.Todos;
 using Template.Api.Health;
 using Template.Api.Middleware;
@@ -61,6 +62,8 @@ await using (var scope = app.Services.CreateAsyncScope())
 // Configure the HTTP request pipeline.
 app.UseExceptionHandling();
 app.UseCors("Default");
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
@@ -71,6 +74,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapHealthChecks("/health");
+app.MapAuthEndpoints();
 app.MapTodoEndpoints();
 
 app.Run();

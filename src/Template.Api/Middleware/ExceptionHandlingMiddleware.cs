@@ -43,6 +43,7 @@ public class ExceptionHandlingMiddleware
                 return WriteValidationProblemAsync(context, validationException);
 
             case ArgumentException:
+            case InvalidOperationException:
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return WriteProblemAsync(context, "Bad Request", exception.Message);
 

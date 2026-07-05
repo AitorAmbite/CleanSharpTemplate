@@ -11,10 +11,12 @@ public static class TodoEndpoints
     public static IEndpointRouteBuilder MapTodoEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapGet("/todos", GetTodosAsync)
-            .WithName("GetTodos");
+            .WithName("GetTodos")
+            .RequireAuthorization();
 
         app.MapPost("/todos", CreateTodoAsync)
-            .WithName("CreateTodo");
+            .WithName("CreateTodo")
+            .RequireAuthorization();
 
         return app;
     }

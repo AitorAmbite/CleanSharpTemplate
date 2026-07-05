@@ -17,7 +17,7 @@ public class ExceptionHandlingMiddlewareTests
         var env = Substitute.For<IHostEnvironment>();
         env.EnvironmentName.Returns("Production");
         var middleware = new ExceptionHandlingMiddleware(
-            _ => throw new InvalidOperationException("internal db stack detail"),
+            _ => throw new Exception("internal db stack detail"),
             Substitute.For<ILogger<ExceptionHandlingMiddleware>>(),
             env);
 

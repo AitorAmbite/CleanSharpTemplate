@@ -15,6 +15,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             var values = new Dictionary<string, string?>
             {
                 ["DatabaseConfig:ConnectionString"] = ConnectionString,
+                ["JwtConfig:Secret"] = "test-secret-must-be-at-least-32-bytes-long!",
             };
 
             config.AddInMemoryCollection(values);

@@ -19,6 +19,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       DatabaseConfig__ConnectionString: Host=postgres;Port=5432;Database=template;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres}
+      JwtConfig__Secret: ${JWT_SECRET:-dev-secret-must-be-at-least-32-bytes-long!}
     ports:
       - "5000:5000"
     depends_on:

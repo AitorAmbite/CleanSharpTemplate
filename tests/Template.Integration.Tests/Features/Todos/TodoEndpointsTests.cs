@@ -1,11 +1,14 @@
 namespace Template.Integration.Tests.Features.Todos;
 
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Template.Api.Features.Auth.Models;
 using Template.Contracts;
+using Template.Contracts.Auth;
 using Template.Contracts.Todos;
 using Template.Infrastructure.Persistence;
 using Template.Integration.Tests.Fixtures;
@@ -46,7 +49,7 @@ public class TodoEndpointsTests : IAsyncLifetime
     [Fact]
     public async Task CreateTodo_Returns_Created_With_CreateTodoResponse()
     {
-        var client = _factory.CreateClient();
+        var client = await CreateAuthenticatedClientAsync();
         var command = new { Title = "Integration test todo" };
 
         var response = await client.PostAsJsonAsync("/todos", command);
@@ -61,7 +64,7 @@ public class TodoEndpointsTests : IAsyncLifetime
     [Fact]
     public async Task GetTodos_Returns_Paginated_List_Of_TodoDtos()
     {
-        var client = _factory.CreateClient();
+        var client = await CreateAuthenticatedClientAsync();
         await client.PostAsJsonAsync("/todos", new { Title = "First" });
         await client.PostAsJsonAsync("/todos", new { Title = "Second" });
 
@@ -78,7 +81,7 @@ public class TodoEndpointsTests : IAsyncLifetime
     [Fact]
     public async Task CreateTodo_With_Empty_Title_Returns_BadRequest_With_ValidationProblem()
     {
-        var client = _factory.CreateClient();
+        var client = await CreateAuthenticatedClientAsync();
         var command = new { Title = "" };
 
         var response = await client.PostAsJsonAsync("/todos", command);
@@ -92,10 +95,40 @@ public class TodoEndpointsTests : IAsyncLifetime
     [Fact]
     public async Task GetTodos_With_Invalid_Pagination_Returns_BadRequest()
     {
-        var client = _factory.CreateClient();
+        var client = await CreateAuthenticatedClientAsync();
 
         var response = await client.GetAsync("/todos?page=0&pageSize=200");
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetTodos_Without_Token_Returns_Unauthorized()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("/todos?page=1&pageSize=10");
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    private async Task<HttpClient> CreateAuthenticatedClientAsync()
+    {
+        var client = _factory.CreateClient();
+
+        var registerRequest = new RegisterRequest(
+            $"user{Guid.CreateVersion7():N}",
+            $"user{Guid.CreateVersion7():N}@example.com",
+            "Password123!");
+
+        var response = await client.PostAsJsonAsync("/auth/register", registerRequest);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var tokens = await response.Content.ReadFromJsonAsync<TokenResponse>();
+        Assert.NotNull(tokens);
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokens!.AccessToken);
+
+        return client;
     }
 }
